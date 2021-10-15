@@ -14,6 +14,8 @@ public class InteractiveZoomDriver<T: UIView> : NSObject, UIGestureRecognizerDel
   
   private var currentInteractingView: UIView?
   
+  private var completion: ()->()
+    
   private lazy var pinchGesture = UIPinchGestureRecognizer(
     target: self,
     action: #selector(self.pinch(sender:))
@@ -28,13 +30,15 @@ public class InteractiveZoomDriver<T: UIView> : NSObject, UIGestureRecognizerDel
     gestureTargetView: UIView,
     sourceView: T,
     targetViewFactory: @escaping (T) throws -> UIView,
-    shouldZoomTransform: @escaping (T) throws -> Bool
+    shouldZoomTransform: @escaping (T) throws -> Bool,
+    completion: @escaping ()->()
   ) {
     
     self.sourceView = sourceView
     self.targetViewFactory = targetViewFactory
     self.shouldZoomTransform = shouldZoomTransform
-    
+    self.completion = completion
+      
     super.init()
     
     pinchGesture.delegate = self
@@ -165,6 +169,7 @@ public class InteractiveZoomDriver<T: UIView> : NSObject, UIGestureRecognizerDel
           self.currentInteractingView = nil
           self.frontWindow?.isHidden = true
           self.frontWindow = nil
+          self.completion()
         }
       })
       
