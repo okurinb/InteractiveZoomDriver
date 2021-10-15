@@ -26,8 +26,9 @@ public class InteractiveZoomView<T: UIView>: UIView, UIGestureRecognizerDelegate
     self.driver = InteractiveZoomDriver(
       gestureTargetView: self,
       sourceView: sourceView,
-      targetViewFactory: targetViewFactory,
-      shouldZoomTransform: shouldZoomTransform
+      targetViewFactory: targetViewFactory,      
+      shouldZoomTransform: shouldZoomTransform,
+      completion: {}
     )
   }
   
