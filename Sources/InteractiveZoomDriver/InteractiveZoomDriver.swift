@@ -94,7 +94,11 @@ public class InteractiveZoomDriver<T: UIView> : NSObject, UIGestureRecognizerDel
       targetView.isUserInteractionEnabled = true
       frontWindow?.addSubview(targetView)
       frontWindow?.isHidden = false
-      
+      frontWindow?.addSubview(targetView)
+      frontWindow?.alpha = 0
+      UIView.animate(withDuration: 0.25) {
+          self.frontWindow?.alpha = 1
+      }
       sourceView.isHidden = true
 
       let currentScale = targetView.frame.size.width / targetView.bounds.size.width
