@@ -157,29 +157,14 @@ public class InteractiveZoomDriver<T: UIView> : NSObject, UIGestureRecognizerDel
           targetView.frame = self.sourceView.convert(self.sourceView.bounds, to: self.frontWindow)
           self.frontWindow?.backgroundColor = .clear
         }, completion: { _ in
-            DispatchQueue.main.async {
-                self.isZooming = false
-                self.sourceView.isHidden = false
-            }
-            if #available(iOS 10.0, *) {
-                Timer.scheduledTimer(withTimeInterval: 0.05, repeats: false) { timer in
-                    timer.invalidate()
-                    DispatchQueue.main.async {
+            self.isZooming = false
+            self.sourceView.isHidden = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
                         targetView.removeFromSuperview()
                         self.currentInteractingView = nil
                         self.frontWindow?.isHidden = true
                         self.frontWindow = nil
                         self.completion()
-                    }
-                }
-            } else {
-                DispatchQueue.main.async {
-                    targetView.removeFromSuperview()
-                    self.currentInteractingView = nil
-                    self.frontWindow?.isHidden = true
-                    self.frontWindow = nil
-                    self.completion()
-                }
             }
         })
       
